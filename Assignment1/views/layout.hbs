@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body class="body">
+    
+    <!-- Main container for bootstrap -->
+    <div class="container-fluid" id="Container">
+
+        <!-- Responsive Navbar -->
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
+
+          <!-- Logo -->
+          <a class="navbar-brand" href="#">
+            <img class="navbarLogo" src="/images/Logo.png" alt="Avenue United Logo"/>
+          </a>
+
+          <!-- Creates menu button for small screens -->
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <!-- Menu -->
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+
+              <!-- Menu Item -->
+              <li class="nav-item">
+                <a class="nav-link navLink" href="#">
+                  <img src="images/house.png" class="navItemImg">
+                  Home
+                </a>
+              </li>
+
+              <!-- Menu Item -->
+              <li class="nav-item">
+                <a class="nav-link navLink" href="#">
+                  <img src="images/gallery.png" class="navItemImg">
+                  Gallery
+                </a>
+              </li>
+
+              <!-- Menu Item -->
+              <li class="nav-item">
+                <a class="nav-link navLink" href="#">
+                  <img src="images/contact.png" class="navItemImg">
+                  Contact
+                </a>
+              </li>
+
+            </ul> <!-- End List -->
+          </div> <!-- End navbar-collapse -->
+
+        </nav><!-- End of menu -->
+      
+        <!-- Content goes here -->
+        {{{body}}}
+
+        <!-- Footer -->
+        <footer class="page-footer font-small special-color-dark pt-4">
+
+        <!-- Footer Elements container -->
+        <div class="container">
+
+          <!-- Social buttons -->
+          <ul class="list-unstyled list-inline text-center">
+            <li class="list-inline-item">
+              <a class="btn-floating btn-fb mx-1" href="#" target="_blank">
+                <i class="fa fa-facebook"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-tw mx-1" href="#" target="_blank">
+                <i class="fa fa-twitter"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-gplus mx-1" href="#" target="_blank">
+                <i class="fa fa-google"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-li mx-1" href="#" target="_blank">
+                <i class="fa fa-linkedin"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-dribbble mx-1" href="#" target="_blank">
+                <i class="fa fa-dribbble"></i>
+              </a>
+            </li>
+          </ul><!-- End Social buttons -->
+
+        </div><!-- End Footer Elements -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+          © 2018 Copyright: AvenueUnited.com
+        </div><!-- End Copyright -->
+
+      </footer><!-- End Footer -->
+
+    </div> <!-- End Conatainer div -->
+  
+  </body>
+</html>
