@@ -345,6 +345,12 @@
   }
 }
 
+/* Comment Button on index */
+#commentButtonText {
+  margin: 0;
+  padding: 0;
+}
+
 /* Comment-Section on About page styles */
 
 .panel-shadow {

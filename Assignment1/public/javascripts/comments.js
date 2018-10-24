@@ -5,6 +5,27 @@ var comments = [];
 
 $(document).ready(function(){
 
+    if( $('#comments').is(':empty') ) {
+        $("#commentButtonText").text("No Comments avilable");
+    }
+
+    $("#toggle-comments").click(function(){
+
+            if ($('#comments').html().trim()) {
+
+                $("#comments").slideToggle();
+
+                if ($("#commentButtonText").text()=="Remove Comments") {
+                    $("#commentButtonText").text("Show Comments");
+                }
+                else {
+                    $("#commentButtonText").text("Remove Comments");
+                }
+
+            }
+
+    });// End toggle-Comments
+
     $("#submit").click(
 
         function(){
@@ -99,11 +120,16 @@ $(document).ready(function(){
 
                 // HTML code to print out a comment
                 var html = '<div class="panel panel-white post panel-shadow"><div class="post-heading"><div class="pull-left image"><img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href="#"><b>'+comments[i].name+'</b></a></div><h6 class="text-muted time">'+stringTimeElapsed+'</h6></div></div><div class="post-description"><p>'+comments[i].comment+'</p><div class="stats"><a href="#" class="btn btn-default stat-item"><i class="fa fa-thumbs-up icon"></i>2</a><a href="#" class="btn btn-default stat-item"><i class="fa fa-thumbs-down icon"></i>12</a></div></div></div>';
+                
                 // Prints out the comment
                 $('#comments').prepend(html);
             
             }// End for loop
 
-    });// End OnClick event
+            if ($("#commentButtonText").text()!="Show Comments") {
+                    $("#commentButtonText").text("Remove Comments");
+            }
+
+    });// End submit OnClick event
 
 }); // End Doc Ready
