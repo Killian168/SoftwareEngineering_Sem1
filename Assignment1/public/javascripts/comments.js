@@ -94,6 +94,10 @@ $(document).ready(function(){
 
 }); // End Doc Ready
 
+$('#nextComment').click(function() {
+    getComments();
+});
+
 function postComment(commentDets) {          
         console.log("I'm posting a comment");  
             $.ajax({

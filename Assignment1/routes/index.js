@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Comment = require('../models/comments');
+var startValue = 0;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -28,11 +29,15 @@ router.post('/addComment', function(req, res, next) {
 router.get('/getComment', function(req,res,next) {
 
   // Get comments from DB
-  Comment.find({}).sort('-date').limit(10).exec(function(err, comments){
-    console.log("finding comments");
-    res.send(comments);       
-    console.log("got Comments");
-  });
+  Comment.find({ _id: {$lt: startValue}})
+             .sort('-Date')
+             .limit(10)
+             .exec(function(err, comments){
+                    console.log("finding comments");
+                    res.send(comments);       
+                    console.log("got Comments");
+                    startValue+=10;
+             });
 
 });
 
