@@ -345,8 +345,10 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Post a Comment</h4>
+        <h5 class="modal-title">Post a Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
 
       <div class="modal-body">
@@ -372,7 +374,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -384,7 +386,7 @@
     <h2>Club Comments</h2>
     <p>Post a comment to help us improve the way we do things</p>
     <button type="button" class="btn btn-danger btn-rounded" data-toggle="modal" data-target="#myModal">Post a Comment</button>
-    <button type="button" class="btn btn-danger btn-rounded" id="toggle-comments"><p id="commentButtonText">Show Comments</p></button>
+    <button type="button" class="btn btn-danger btn-rounded" id="toggle-comments"><p id="commentButtonText">Hide Comments</p></button>
     <div class="row">
         <div class="col" id="comments"></div>
     </div>

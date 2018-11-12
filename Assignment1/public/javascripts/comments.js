@@ -1,64 +1,163 @@
 var name;
 var comment;
 var time;
-var comments = [];
+var upVotes;
+var downVotes;
 
 $(document).ready(function(){
 
-    if( $('#comments').is(':empty') ) {
-        $("#commentButtonText").text("No Comments avilable");
-    }
+    // Gets rid of all previous comments in the comment section
+    $('#comments').empty();
 
+    // Returns all comments from the db
+    getComments();
+
+    // Toggles text in the toggle comment div
     $("#toggle-comments").click(function(){
 
             if ($('#comments').html().trim()) {
 
                 $("#comments").slideToggle();
 
-                if ($("#commentButtonText").text()=="Remove Comments") {
+                if ($("#commentButtonText").text()=="Hide Comments") {
                     $("#commentButtonText").text("Show Comments");
                 }
                 else {
-                    $("#commentButtonText").text("Remove Comments");
+                    $("#commentButtonText").text("Hide Comments");
                 }
 
             }
 
     });// End toggle-Comments
 
+    // Submits a new comment to the DB and displays it
     $("#submit").click(
 
         function(){
 
+            // Remove previous stylings
+            $('#name').removeClass('inValid');
+            $('#comment').removeClass('inValid');
+
             // Creates a new object called myObject to hold name:values
-            var myObject = {name,comment, time}; // 3 vars of name, comment, time
+            var myObject = {name,comment, upVotes, downVotes, time};
 
             // Stores the values from the form in the above object
             myObject.name = $("#name").val();
             myObject.comment = $('#comment').val();
+            myObject.upVotes = 0;
+            myObject.downVotes = 0;
             myObject.time = Date.now();
 
-            // If user omissed "@" add it to their name
-            var string = myObject.name;
-            var substring = "@";
-            if(!string.includes(substring)) {
-                myObject.name = substring + string;
+            // Error checks typing
+            var formComplete = checkForm();
+
+            // Checks if the form is successfully completed    
+            if(formComplete==false) {
+
+                // If not highlight areas that need to be filled
+                if($.trim($('#name').val()) == '') { // zero-length string AFTER a trim
+                    $('#name').addClass('inValid');
+                }
+                if($.trim($('#comment').val()) == '') { // zero-length string AFTER a trim
+                    $('#comment').addClass('inValid');
+                }
+
+            } 
+            else {
+
+                // If user omissed "@" add it to their name
+                var string = myObject.name;
+                var substring = "@";
+                if(!string.includes(substring)) {
+                    myObject.name = substring + string;
+                }
+
+                // Sends the comment to the DB
+                postComment(myObject);
+
+                // Gets comments from DB and displays them on the page
+                getComments();
+
+                // Changes the text inside the commentButton
+                if ($("#commentButtonText").text()!="Show Comments") {
+                        $("#commentButtonText").text("Remove Comments");
+                }
             }
 
+    });// End submit OnClick event
 
-            // Prints out the value of the object
-            //alert(myObject.name + "\n" + myObject.comment + "\n" + myObject.time);
+    $('#close-modal').click(function() {
+        $('#name').removeClass('inValid');
+        $('#comment').removeClass('inValid');
+    });
 
-            // Pushes myObject onto the array for storage
-            comments.push({"name": myObject.name, "comment": myObject.comment, "time": myObject.time});
-        
-            // Gets rid of all previous comments in the comment section
-            $('#comments').empty();
+}); // End Doc Ready
 
-            // Runs through the comments array and prints out a comment on screen
-            for(var i=0; i<comments.length; i++) {
-                var timeElapsed = (Date.now() - comments[i].time)/1000;
-                var stringTimeElapsed;
+function postComment(commentDets) {          
+        console.log("I'm posting a comment");  
+            $.ajax({
+                url: '/addComment/',
+                type: 'POST',
+                data: {handle: commentDets.name, comment: commentDets.comment, upVotes: commentDets.upVotes,
+                        downVotes: commentDets.downVotes, timeStamp: commentDets.time},
+                success: function() {
+                    console.log('I sent a comment to the DB succesfully');
+                    displayComment(commentDets);
+                },
+                error: console.log('There was an error when sending the comment to the DB')
+            });
+    }// End postComments
+
+    function getComments() {
+        console.log("I'm getting the comments");
+        $('#comments').empty();
+            $.ajax({
+                url: '/getComment',
+                type: 'GET',
+                success: function (data) {
+
+                    console.log("Got the Comments");
+
+                    if (!$.trim(data)){
+                        console.log("There are no Comments");
+                        $("#commentButtonText").text("No Comments Available");
+                    }
+                    else{   
+                        console.log("About to display!!");
+                        var posts = "";
+                        for (var i = 0; i < data.length; i++) {
+                            // Creates HTML
+                            console.log(data);
+                            console.log(data.length);
+                            console.log('Get Comments loop ran '+ i +' times');
+                            displayComment(data[i]);
+                        }
+                    }
+                }
+            });
+    }// End getComments
+
+    function displayComment(data) {
+
+                console.log(data);
+
+                var stringTimeElapsed = calcTime(data.timeStamp);
+
+                // HTML code to print out a comment
+                var html = '<div class="panel panel-white post panel-shadow"><div class="post-heading"><div class="pull-left image"><img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href="#"><b>'+data.handle+'</b></a></div><h6 class="text-muted time">'+stringTimeElapsed+'</h6></div></div><div class="post-description"><p>'+data.comment+'</p><div class="stats"><button class="btn btn-default stat-item" id="upVotes"><i class="fa fa-thumbs-up icon"></i>'+data.upVotes+'</button><button class="btn btn-default stat-item" id="downVotes" ><i class="fa fa-thumbs-down icon"></i>'+data.downVotes+'</button></div></div></div>';
+                
+                // Prints out the comment
+                $('#comments').prepend(html);
+
+    }// End displayComment
+
+    // Calculates the time from when it was posted
+    function calcTime(time) {
+
+        var date = new Date(time)
+        var timeElapsed = ((Date.now() - date.getTime())/1000);
+        var stringTimeElapsed = "";
 
                 // If in Seconds
                 if(timeElapsed<60) {
@@ -118,18 +217,19 @@ $(document).ready(function(){
 
                 }
 
-                // HTML code to print out a comment
-                var html = '<div class="panel panel-white post panel-shadow"><div class="post-heading"><div class="pull-left image"><img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href="#"><b>'+comments[i].name+'</b></a></div><h6 class="text-muted time">'+stringTimeElapsed+'</h6></div></div><div class="post-description"><p>'+comments[i].comment+'</p><div class="stats"><a href="#" class="btn btn-default stat-item"><i class="fa fa-thumbs-up icon"></i>2</a><a href="#" class="btn btn-default stat-item"><i class="fa fa-thumbs-down icon"></i>12</a></div></div></div>';
-                
-                // Prints out the comment
-                $('#comments').prepend(html);
-            
-            }// End for loop
+                return stringTimeElapsed;
 
-            if ($("#commentButtonText").text()!="Show Comments") {
-                    $("#commentButtonText").text("Remove Comments");
-            }
+    }// End calcTime
 
-    });// End submit OnClick event
+    function checkForm() {
 
-}); // End Doc Ready
+        // Checks if areas are filled
+        if(($.trim($('#name').val()) == '')||($.trim($('#comment').val()) == '')) 
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }// End checkForm()

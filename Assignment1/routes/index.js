@@ -28,12 +28,10 @@ router.post('/addComment', function(req, res, next) {
 router.get('/getComment', function(req,res,next) {
 
   // Get comments from DB
-  Comment.find({}, function (err, comments) {
-    if (err)
-      res.send(err);
-
-    res.send(comments);
-
+  Comment.find({}).sort('-date').limit(10).exec(function(err, comments){
+    console.log("finding comments");
+    res.send(comments);       
+    console.log("got Comments");
   });
 
 });

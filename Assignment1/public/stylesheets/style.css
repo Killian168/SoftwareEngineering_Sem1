@@ -351,7 +351,7 @@
   padding: 0;
 }
 
-/* Comment-Section on About page styles */
+/* Comment-Section on index page styles */
 
 .panel-shadow {
     box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
@@ -455,4 +455,11 @@
 }
 .post .post-footer .comments-list .comment > .comments-list {
   margin-left: 50px;
+}
+
+.inValid {
+  border-radius: 1px;
+  border-color: red;
+  border-style: solid;
+  border-radius: 5px;
 }
