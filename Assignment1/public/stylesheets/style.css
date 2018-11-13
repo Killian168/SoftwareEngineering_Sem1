@@ -463,3 +463,8 @@
   border-style: solid;
   border-radius: 5px;
 }
+
+.nextPrevbuttons {
+  margin: 1%;
+  display: inline-block;
+}

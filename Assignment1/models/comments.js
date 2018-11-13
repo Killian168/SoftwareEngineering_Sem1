@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var mongoosePaginate = require('mongoose-paginate');
 require('./util');
 
 var commentSchema = new Schema({
@@ -9,5 +10,8 @@ var commentSchema = new Schema({
     downVotes: {type: Number, min: 0},
     timeStamp: {type: Date, default: new Date}
 });
+commentSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model('Comment', commentSchema);
+var Model = mongoose.model('Comment', commentSchema);
+
+module.exports = Model;

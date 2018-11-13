@@ -9,7 +9,7 @@ $(document).ready(function(){
     // Gets rid of all previous comments in the comment section
     $('#comments').empty();
 
-    // Returns all comments from the db
+    // Returns first 10 comments from the db
     getComments();
 
     // Toggles text in the toggle comment div
@@ -18,6 +18,8 @@ $(document).ready(function(){
             if ($('#comments').html().trim()) {
 
                 $("#comments").slideToggle();
+                $("#prevComment").slideToggle();
+                $("#nextComment").slideToggle();
 
                 if ($("#commentButtonText").text()=="Hide Comments") {
                     $("#commentButtonText").text("Show Comments");
@@ -92,11 +94,15 @@ $(document).ready(function(){
         $('#comment').removeClass('inValid');
     });
 
-}); // End Doc Ready
+    $('#nextComment').click(function() {
+        getNextComments();
+    });
 
-$('#nextComment').click(function() {
-    getComments();
-});
+    $('#prevComment').click(function() {
+        getPrevComments();
+    });
+
+}); // End Doc Ready
 
 function postComment(commentDets) {          
         console.log("I'm posting a comment");  
@@ -107,21 +113,22 @@ function postComment(commentDets) {
                         downVotes: commentDets.downVotes, timeStamp: commentDets.time},
                 success: function() {
                     console.log('I sent a comment to the DB succesfully');
-                    displayComment(commentDets);
+                    getComments();
                 },
                 error: console.log('There was an error when sending the comment to the DB')
             });
     }// End postComments
 
     function getComments() {
-        console.log("I'm getting the comments");
-        $('#comments').empty();
+        console.log("I'm getting the next comments");
             $.ajax({
                 url: '/getComment',
                 type: 'GET',
                 success: function (data) {
 
-                    console.log("Got the Comments");
+                    $('#comments').empty();
+
+                    console.log(data);
 
                     if (!$.trim(data)){
                         console.log("There are no Comments");
@@ -129,30 +136,79 @@ function postComment(commentDets) {
                     }
                     else{   
                         console.log("About to display!!");
-                        var posts = "";
-                        for (var i = 0; i < data.length; i++) {
-                            // Creates HTML
-                            console.log(data);
-                            console.log(data.length);
-                            console.log('Get Comments loop ran '+ i +' times');
-                            displayComment(data[i]);
+                        for (var i = 0; i < data.docs.length; i++) {
+                            displayComment(data.docs[i]);
                         }
                     }
                 }
             });
-    }// End getComments
+    }// End getNextComments
+
+    function getNextComments() {
+        console.log("I'm getting the next comments");
+            $.ajax({
+                url: '/getNextComment',
+                type: 'GET',
+                success: function (data) {
+
+                    $('#comments').empty();
+
+                    console.log(data);
+
+                    if (!$.trim(data)){
+                        console.log("There are no Comments");
+                        $("#commentButtonText").text("No Comments Available");
+                    }
+                    else{   
+                        console.log("About to display!!");
+                        for (var i = 0; i < data.docs.length; i++) {
+                            displayComment(data.docs[i]);
+                        }
+                        if(data.page>=data.pages) {
+                            $('#nextPage').html('<p class="btn btn-danger btn-rounded" >No more comments available</p>');
+                        }
+                    }
+                }
+            });
+    }// End getNextComments
+
+    function getPrevComments() {
+        console.log("I'm getting the previous comments");
+            $.ajax({
+                url: '/getPrevComment',
+                type: 'GET',
+                success: function (data) {
+
+                    $('#comments').empty();
+
+                    console.log(data);
+
+                    if (!$.trim(data)){
+                        console.log("There are no Comments");
+                        $("#commentButtonText").text("No Comments Available");
+                    }
+                    else{   
+                        console.log("About to display!!");
+                        for (var i = 0; i < data.docs.length; i++) {
+                            displayComment(data.docs[i]);
+                        }
+                        if(data.page>=data.pages) {
+                            $('#nextPage').html('');
+                        }
+                    }
+                }
+            });
+    }// End getPrevComments
 
     function displayComment(data) {
-
-                console.log(data);
-
+        
                 var stringTimeElapsed = calcTime(data.timeStamp);
 
                 // HTML code to print out a comment
                 var html = '<div class="panel panel-white post panel-shadow"><div class="post-heading"><div class="pull-left image"><img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href="#"><b>'+data.handle+'</b></a></div><h6 class="text-muted time">'+stringTimeElapsed+'</h6></div></div><div class="post-description"><p>'+data.comment+'</p><div class="stats"><button class="btn btn-default stat-item" id="upVotes"><i class="fa fa-thumbs-up icon"></i>'+data.upVotes+'</button><button class="btn btn-default stat-item" id="downVotes" ><i class="fa fa-thumbs-down icon"></i>'+data.downVotes+'</button></div></div></div>';
                 
                 // Prints out the comment
-                $('#comments').prepend(html);
+                $('#comments').append(html);
 
     }// End displayComment
 

@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Comment = require('../models/comments');
-var startValue = 0;
+var nextpage = 1; // Index of page loaded next time a get request for comments is recieved
+var totalPages = 1; // 1 by default
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -20,7 +21,8 @@ router.post('/addComment', function(req, res, next) {
             throw err;
 
         res.json({
-            "id": savedComment._id
+            "id": savedComment._id,
+            "commentMessage": savedComment.comment
         });
     });
 });
@@ -28,16 +30,57 @@ router.post('/addComment', function(req, res, next) {
 // Gets Comments from the DB
 router.get('/getComment', function(req,res,next) {
 
-  // Get comments from DB
-  Comment.find({ _id: {$lt: startValue}})
-             .sort('-Date')
-             .limit(10)
-             .exec(function(err, comments){
-                    console.log("finding comments");
-                    res.send(comments);       
-                    console.log("got Comments");
-                    startValue+=10;
-             });
+    var query   = {};
+    var options = {
+        sort:     { "timeStamp": -1 },
+        limit:    10,
+        page: nextpage
+    };
+
+    // Get comments from DB
+    Comment.paginate(query, options).then(function(result) {
+        res.send(result);
+        totalPages = result.pages;
+    });
+
+});
+
+// Gets Comments from the DB
+router.get('/getNextComment', function(req,res,next) {
+    if(nextpage<totalPages) {
+        nextpage++;
+    }
+    var query   = {};
+    var options = {
+        sort:     { "timeStamp": -1 },
+        limit:    10,
+        page: nextpage
+    };
+
+    // Get comments from DB
+    Comment.paginate(query, options).then(function(result) {
+        res.send(result);
+        totalPages = result.pages;
+    });
+
+});
+
+// Gets Comments from the DB
+router.get('/getPrevComment', function(req,res,next) {
+    if(nextpage>1) {
+        nextpage--;
+    }
+    var query   = {};
+    var options = {
+        sort:     { "timeStamp": -1 },
+        limit:    10,
+        page: nextpage
+    };
+
+    // Get comments from DB
+    Comment.paginate(query, options).then(function(result) {
+        res.send(result);
+    });
 
 });
 
