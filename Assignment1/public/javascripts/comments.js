@@ -205,7 +205,7 @@ function postComment(commentDets) {
                 var stringTimeElapsed = calcTime(data.timeStamp);
 
                 // HTML code to print out a comment
-                var html = '<div class="panel panel-white post panel-shadow"><div class="post-heading"><div class="pull-left image"><img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href="#"><b>'+data.handle+'</b></a></div><h6 class="text-muted time">'+stringTimeElapsed+'</h6></div></div><div class="post-description"><p>'+data.comment+'</p><div class="stats"><button class="btn btn-default stat-item" id="upVotes"><i class="fa fa-thumbs-up icon"></i>'+data.upVotes+'</button><button class="btn btn-default stat-item" id="downVotes" ><i class="fa fa-thumbs-down icon"></i>'+data.downVotes+'</button></div></div></div>';
+                var html = '<div class="panel panel-white post panel-shadow"><div class="post-heading"><div class="pull-left image"><img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href="#"><b>'+data.handle+'</b></a></div><h6 class="text-muted time">'+stringTimeElapsed+'</h6></div></div><div class="post-description"><p>'+data.comment+'</p><div class="stats"><button onclick="upVotes(\''+data._id+'\');" class="btn btn-default stat-item" id="upVotes"><i class="fa fa-thumbs-up icon"></i>'+data.upVotes+'</button><button onclick="downVotes(\''+data._id+'\');" class="btn btn-default stat-item" id="downVotes" ><i class="fa fa-thumbs-down icon"></i>'+data.downVotes+'</button></div></div></div>';
                 
                 // Prints out the comment
                 $('#comments').append(html);
@@ -293,3 +293,25 @@ function postComment(commentDets) {
         }
 
     }// End checkForm()
+
+    function downVotes(id) {
+        $.ajax({
+            url: '/voteDownComment/'+id,
+            type: 'GET',
+            success: function (result) {
+                console.log("You voted this comment "+id+" down successfully");
+                getComments();
+            }
+        });
+    }
+
+    function upVotes(id) {
+        $.ajax({
+            url: '/voteUpComment/'+id,
+            type: 'GET',
+            success: function (result) {
+                console.log("You voted this comment "+id+" up successfully\n and the result is "+result);
+                getComments();
+            }
+        });
+    }

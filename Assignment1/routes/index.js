@@ -84,4 +84,34 @@ router.get('/getPrevComment', function(req,res,next) {
 
 });
 
+router.get('/voteUpComment/:id', function(req, res, next) {
+
+    var id = req.params.id;
+
+    Comment.findByIdAndUpdate({_id: id}, {$inc: {upVotes: 1} }).then(function(result) {
+        res.send(result);
+    });
+
+});
+
+router.get('/voteDownComment/:id', function(req, res, next) {
+
+    var id = req.params.id;
+
+    Comment.findByIdAndUpdate({_id: id}, {$inc: {downVotes: 1} }).then(function(result) {
+        res.send(result);
+    });
+
+});
+
+router.get('/deleteComment/:id', function(req,res,next) {
+
+    var id = req.params.id;
+
+    Comment.findByIdAndRemove({_id: id}).then(function() {
+        res.send(id+" has been deleted");
+    });
+
+});
+
 module.exports = router;
