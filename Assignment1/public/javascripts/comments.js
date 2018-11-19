@@ -319,7 +319,7 @@ function postComment(commentDets) {
     function deleteComment(id) {
         $.ajax({
             url: '/deleteComment/'+id,
-            type: 'GET',
+            type: 'DELETE',
             success: function () {
                 console.log("You deleted this comment "+id+" successfully");
                 getComments();

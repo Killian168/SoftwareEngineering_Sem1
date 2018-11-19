@@ -84,7 +84,7 @@ router.get('/getPrevComment', function(req,res,next) {
 
 });
 
-router.get('/voteUpComment/:id', function(req, res, next) {
+router.put('/voteUpComment/:id', function(req, res, next) {
 
     var id = req.params.id;
 
@@ -94,7 +94,7 @@ router.get('/voteUpComment/:id', function(req, res, next) {
 
 });
 
-router.get('/voteDownComment/:id', function(req, res, next) {
+router.put('/voteDownComment/:id', function(req, res, next) {
 
     var id = req.params.id;
 
@@ -104,7 +104,7 @@ router.get('/voteDownComment/:id', function(req, res, next) {
 
 });
 
-router.get('/deleteComment/:id', function(req,res,next) {
+router.delete('/deleteComment/:id', function(req,res,next) {
 
     var id = req.params.id;
 
