@@ -297,7 +297,7 @@ function postComment(commentDets) {
     function downVotes(id) {
         $.ajax({
             url: '/voteDownComment/'+id,
-            type: 'GET',
+            type: 'PUT',
             success: function (result) {
                 console.log("You voted this comment "+id+" down successfully");
                 getComments();
@@ -308,7 +308,7 @@ function postComment(commentDets) {
     function upVotes(id) {
         $.ajax({
             url: '/voteUpComment/'+id,
-            type: 'GET',
+            type: 'PUT',
             success: function (result) {
                 console.log("You voted this comment "+id+" up successfully\n and the result is "+result);
                 getComments();
